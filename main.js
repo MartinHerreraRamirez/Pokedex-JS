@@ -1,0 +1,46 @@
+const POKE_CONTAINER = document.getElementById('poke-container')
+
+const POKE_NUMBERS = 151
+
+const fetchPokemons = async () => {
+    for (let i = 1; i <= POKE_NUMBERS; i++){
+        await getPokemon(i)
+    }
+}
+
+const getPokemon = async (id) => {
+    const url = 'https://pokeapi.co/api/v2/pokemon/'+id.toString()    
+
+    const res = await fetch(url)
+    const pokemon = await res.json()
+
+    createPokemonCard(pokemon)
+}
+
+const createPokemonCard = (pokemon) => {
+
+    const {name, types, sprites, id} = pokemon 
+    const type = types[0].type.name
+    const pokemonEl = document.createElement('div')
+    pokemonEl.classList.add('pokemon')
+    const pokeInnerHtml = `
+    <div class='img-container'>
+        <img src='${sprites.front_default}' alt='${name}'/>
+    </div>
+
+    <div class='info'>
+        <span class='number'>${id}</span>
+        <h3 class='name'>${name}</h3>
+        
+        <small class='type'>${type}</small>
+    </div>
+    `
+
+    pokemonEl.innerHTML = pokeInnerHtml
+
+    POKE_CONTAINER.appendChild(pokemonEl)
+}
+
+
+
+fetchPokemons()
